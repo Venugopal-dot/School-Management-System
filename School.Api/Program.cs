@@ -23,6 +23,8 @@ builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IClassRoomRepository, ClassRoomRepository>();
 builder.Services.AddScoped<IClassRoomService, ClassRoomService>();
+builder.Services.AddScoped<ITeacherService, TeacherService>();
+builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 
 
 var app = builder.Build();
