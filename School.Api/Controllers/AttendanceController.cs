@@ -48,12 +48,14 @@ namespace School.Api.Controllers
         {
             var attendance = await _service.CreateAsync(request);
 
-            return Ok(new ApiResponse<AttendanceResponse>
-            {
-                Success = true,
-                Message = "Attendance created successfully.",
-                Data = attendance
-            });
+            return StatusCode(StatusCodes.Status201Created,
+                new ApiResponse<AttendanceResponse>
+                {
+                    Success = true,
+                    Message = "Attendance created successfully.",
+                    Data = attendance
+                }
+            );
         }
 
         [HttpPut("{id}")]
@@ -74,14 +76,9 @@ namespace School.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAttendance(int id)
         {
-            var deleted = await _service.DeleteAsync(id);
+            await _service.DeleteAsync(id);
 
-            return Ok(new ApiResponse<bool>
-            {
-                Success = true,
-                Message = "Attendance deleted successfully.",
-                Data = deleted
-            });
+            return NoContent();
         }
     }
 }

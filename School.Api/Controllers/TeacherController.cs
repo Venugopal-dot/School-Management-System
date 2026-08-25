@@ -73,12 +73,7 @@ namespace School.Api.Controllers
         {
             await _service.DeleteAsync(id);
 
-            return Ok(new ApiResponse<bool>
-            {
-                Success = true,
-                Message = "Teacher deleted successfully.",
-                Data = true
-            });
+            return NoContent();
         }
     }
 }

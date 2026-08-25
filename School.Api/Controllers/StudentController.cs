@@ -2,8 +2,6 @@
 using School.Api.Models;
 using School.Application.DTOs.Student;
 using School.Application.Interfaces;
-using School.Application.Services;
-using School.Domain.Entities;
 
 namespace School.Api.Controllers
 {
@@ -35,12 +33,15 @@ namespace School.Api.Controllers
         {
             var student = await _studentservice.CreateAsync(request);
 
-            return Ok(new ApiResponse<StudentResponse>
-            {
-                Success = true,
-                Message = "Student created successfully.",
-                Data = student
-            });
+            return CreatedAtAction(
+                nameof(GetStudentById),
+                new { id = student.Id },
+                new ApiResponse<StudentResponse>
+                {
+                    Success = true,
+                    Message = "Student created successfully.",
+                    Data = student
+                });
         }
 
         [HttpGet("{id}")]
@@ -74,12 +75,7 @@ namespace School.Api.Controllers
         {
             await _studentservice.DeleteAsync(id);
 
-            return Ok(new ApiResponse<bool>
-            {
-                Success = true,
-                Message = "Student deleted successfully.",
-                Data = true
-            });
+            return NoContent();
         }
     }
 }

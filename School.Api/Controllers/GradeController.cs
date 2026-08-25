@@ -79,11 +79,6 @@ public class GradeController : ControllerBase
     {
         await _service.DeleteAsync(id);
 
-        return Ok(new ApiResponse<bool>
-        {
-            Success = true,
-            Message = "Grade deleted successfully.",
-            Data = true
-        });
+        return NoContent();
     }
 }

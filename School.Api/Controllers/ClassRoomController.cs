@@ -10,6 +10,7 @@ namespace School.Api.Controllers
     public class ClassRoomController : ControllerBase
     {
         private readonly IClassRoomService _service;
+
         public ClassRoomController(IClassRoomService service)
         {
             _service = service;
@@ -19,6 +20,7 @@ namespace School.Api.Controllers
         public async Task<IActionResult> GetAllClassRooms()
         {
             var classrooms = await _service.GetAllAsync();
+
             return Ok(new ApiResponse<IEnumerable<ClassRoomDto>>
             {
                 Success = true,
@@ -26,10 +28,12 @@ namespace School.Api.Controllers
                 Data = classrooms
             });
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetClassRoomById(int id)
         {
             var classroom = await _service.GetByIdAsync(id);
+
             return Ok(new ApiResponse<ClassRoomDto>
             {
                 Success = true,
@@ -37,21 +41,29 @@ namespace School.Api.Controllers
                 Data = classroom
             });
         }
-        
+
         [HttpPost]
-        public async Task<IActionResult> CreateClassRoomAsync(CreateClassRoomRequest room)
+        public async Task<IActionResult> CreateClassRoomAsync(
+            CreateClassRoomRequest room)
         {
             var classroom = await _service.CreateAsync(room);
-            return Ok(new ApiResponse<ClassRoomResponse> {
-                Success = true,
-                Message = "Class room created successfully.",
-                Data = classroom
-            });
+
+            return StatusCode(StatusCodes.Status201Created,
+                new ApiResponse<ClassRoomResponse>
+                {
+                    Success = true,
+                    Message = "Class room created successfully.",
+                    Data = classroom
+                });
         }
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateClassRoom(int id, UpdateClassRoomRequest room)
+        public async Task<IActionResult> UpdateClassRoom(
+            int id,
+            UpdateClassRoomRequest room)
         {
             var classroom = await _service.UpdateAsync(id, room);
+
             return Ok(new ApiResponse<ClassRoomResponse>
             {
                 Success = true,
@@ -63,13 +75,9 @@ namespace School.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteClassRoom(int id)
         {
-            var deleted = await _service.DeleteAsync(id);
-            return Ok(new ApiResponse<bool>
-            {
-                Success = true,
-                Message = "Class room deleted successfully.",
-                Data = deleted
-            });
+            await _service.DeleteAsync(id);
+
+            return NoContent();
         }
     }
 }

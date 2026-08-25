@@ -53,6 +53,28 @@ namespace School.Infrastructure.Data
                 .WithMany()
                 .HasForeignKey(g => g.SubjectId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Student unique fields
+            modelBuilder.Entity<Student>()
+                .HasIndex(s => s.AdmissionNumber)
+                .IsUnique();
+            
+            modelBuilder.Entity<Student>()
+                .HasIndex(s => s.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<Subject>()
+                .HasIndex(s => s.SubjectCode)
+                .IsUnique();
+
+            modelBuilder.Entity<ClassRoom>()
+                .HasIndex(c => new
+                {
+                    c.ClassName,
+                    c.Section,
+                    c.AcademicYear
+                })
+                .IsUnique();
         }
     }
 }

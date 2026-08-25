@@ -1,7 +1,8 @@
 ﻿using School.Api.Models;
 using School.Application.Exceptions;
-using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace School.Api.Middleware
 {
@@ -31,14 +32,29 @@ namespace School.Api.Middleware
 
                     DuplicateRecordException => StatusCodes.Status409Conflict,
 
+                    DbUpdateException dbEx when
+                        dbEx.InnerException is SqlException sqlEx &&
+                        (sqlEx.Number == 2601 || sqlEx.Number == 2627)
+                            => StatusCodes.Status409Conflict,
+
                     _ => StatusCodes.Status500InternalServerError
+                };
+
+                var message = ex switch
+                {
+                    DbUpdateException dbEx when
+                        dbEx.InnerException is SqlException sqlEx &&
+                        (sqlEx.Number == 2601 || sqlEx.Number == 2627)
+                            => "A record with the same unique value already exists.",
+
+                    _ => ex.Message
                 };
 
                 var response = new ErrorResponse
                 {
                     Success = false,
                     StatusCode = context.Response.StatusCode,
-                    Message = ex.Message,
+                    Message = message,
                     Timestamp = DateTime.UtcNow
                 };
 

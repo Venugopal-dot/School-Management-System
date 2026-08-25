@@ -68,11 +68,11 @@ namespace School.Infrastructure.Migrations
 
                     b.Property<string>("AcademicYear")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ClassName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -85,12 +85,15 @@ namespace School.Infrastructure.Migrations
 
                     b.Property<string>("Section")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClassName", "Section", "AcademicYear")
+                        .IsUnique();
 
                     b.ToTable("ClassRooms");
                 });
@@ -152,7 +155,7 @@ namespace School.Infrastructure.Migrations
 
                     b.Property<string>("AdmissionNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ClassRoomId")
                         .HasColumnType("int");
@@ -168,7 +171,7 @@ namespace School.Infrastructure.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -193,7 +196,13 @@ namespace School.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AdmissionNumber")
+                        .IsUnique();
+
                     b.HasIndex("ClassRoomId");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Students");
                 });
@@ -224,7 +233,7 @@ namespace School.Infrastructure.Migrations
 
                     b.Property<string>("SubjectCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SubjectName")
                         .IsRequired()
@@ -234,6 +243,9 @@ namespace School.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SubjectCode")
+                        .IsUnique();
 
                     b.ToTable("Subjects");
                 });
