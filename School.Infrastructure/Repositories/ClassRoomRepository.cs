@@ -15,13 +15,14 @@ namespace School.Infrastructure.Repositories
         public async Task<IEnumerable<ClassRoom>> GetAllAsync()
         {
             return await _context.ClassRooms
+                .AsNoTracking()
                 .Where(x => !x.IsDeleted)
                 .ToListAsync();
         }
 
         public async Task<ClassRoom?> GetByIdAsync(int id)
         {
-            return await _context.ClassRooms
+            return await _context.ClassRooms.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
         }
 

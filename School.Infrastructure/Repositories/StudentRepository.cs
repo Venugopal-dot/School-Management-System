@@ -17,12 +17,12 @@ public class StudentRepository : IStudentRepository
 
     public async Task<IEnumerable<Student>> GetAllAsync()
     {
-        return await _context.Students.Where(s => !s.IsDeleted).ToListAsync(); 
+        return await _context.Students.AsNoTracking().Where(s => !s.IsDeleted).ToListAsync(); 
     }
 
     public async Task<Student?> GetByIdAsync(int id)
     {
-        return await _context.Students.FirstOrDefaultAsync(s => s.Id == id && !s.IsDeleted);
+        return await _context.Students.AsNoTracking().FirstOrDefaultAsync(s => s.Id == id && !s.IsDeleted);
     }
 
     public async Task<Student> AddAsync(Student student)

@@ -55,12 +55,12 @@ namespace School.Infrastructure.Repositories
 
         public async Task<IEnumerable<Teacher>> GetAllAsync()
         {
-            return await _context.Teachers.Where(x => !x.IsDeleted).ToListAsync();
+            return await _context.Teachers.AsNoTracking().Where(x => !x.IsDeleted).ToListAsync();
         }
 
         public async Task<Teacher?> GetByIdAsync(int id)
         {
-            return await _context.Teachers.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+            return await _context.Teachers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
         }
 
         public async Task<Teacher> UpdateAsync(Teacher teacher)

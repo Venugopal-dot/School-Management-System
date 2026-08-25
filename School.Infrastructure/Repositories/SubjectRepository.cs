@@ -41,12 +41,12 @@ namespace School.Infrastructure.Repositories
 
         public async Task<IEnumerable<Subject>> GetAllAsync()
         {
-            return await _context.Subjects.Where(x => !x.IsDeleted).ToListAsync();
+            return await _context.Subjects.AsNoTracking().Where(x => !x.IsDeleted).ToListAsync();
         }
 
         public async Task<Subject?> GetByIdAsync(int id)
         {
-            return await _context.Subjects.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+            return await _context.Subjects.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
         }
 
         public async Task<bool> SubjectNameExistsAsync(string subjectName)

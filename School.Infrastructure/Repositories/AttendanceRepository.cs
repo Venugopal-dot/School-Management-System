@@ -17,6 +17,7 @@ namespace School.Infrastructure.Repositories
         public async Task<IEnumerable<Attendance>> GetAllAsync()
         {
             return await _context.Attendances
+                .AsNoTracking()
                 .Where(x => !x.IsDeleted)
                 .ToListAsync();
         }
@@ -24,6 +25,7 @@ namespace School.Infrastructure.Repositories
         public async Task<Attendance?> GetByIdAsync(int id)
         {
             return await _context.Attendances
+                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
         }
 

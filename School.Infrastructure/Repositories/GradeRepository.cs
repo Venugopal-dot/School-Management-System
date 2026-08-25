@@ -39,12 +39,12 @@ namespace School.Infrastructure.Repositories
 
         public async Task<IEnumerable<Grade>> GetAllAsync()
         {
-            return await _context.Grades.Where(x => !x.IsDeleted).ToListAsync();
+            return await _context.Grades.AsNoTracking().Where(x => !x.IsDeleted).ToListAsync();
         }
 
         public async Task<Grade?> GetByIdAsync(int id)
         {
-            return await _context.Grades.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+            return await _context.Grades.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
 
         }
 
