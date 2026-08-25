@@ -37,9 +37,9 @@ namespace School.Api.Controllers
                 Data = classroom
             });
         }
-
+        
         [HttpPost]
-        public async Task<IActionResult> CreateClassRoomAsyc(CreateClassRoomRequest room)
+        public async Task<IActionResult> CreateClassRoomAsync(CreateClassRoomRequest room)
         {
             var classroom = await _service.CreateAsync(room);
             return Ok(new ApiResponse<ClassRoomResponse> {

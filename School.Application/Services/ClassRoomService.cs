@@ -13,6 +13,18 @@ namespace School.Application.Services
         {
             _repository = repository;
         }
+        private static void ValidateClassRoom(string className, string section)
+        {
+            if (string.IsNullOrWhiteSpace(className))
+            {
+                throw new BusinessValidationException("Class Name is required.");
+            }
+
+            if (string.IsNullOrWhiteSpace(section))
+            {
+                throw new BusinessValidationException("Section is required.");
+            }
+        }
         private static void ValidateAcademicYear(string academicYear)
         {
             if (string.IsNullOrWhiteSpace(academicYear))
@@ -76,6 +88,9 @@ namespace School.Application.Services
         }
         public async Task<ClassRoomResponse> CreateAsync(CreateClassRoomRequest request)
         {
+            ValidateAcademicYear(request.AcademicYear);
+            ValidateClassRoom(request.ClassName, request.Section);
+            ValidateAcademicYear(request.AcademicYear);
             if (await _repository.ClassRoomExistsAsync(
                 request.ClassName,
                 request.Section,
@@ -83,7 +98,7 @@ namespace School.Application.Services
             {
                 throw new DuplicateRecordException("ClassRoom already exists.");
             }
-            ValidateAcademicYear(request.AcademicYear);
+            
             var classroom = new ClassRoom
             {
                 ClassName = request.ClassName,
@@ -108,6 +123,8 @@ namespace School.Application.Services
         public async Task<ClassRoomResponse> UpdateAsync(int id, UpdateClassRoomRequest request)
         {
             var classroom = await _repository.GetByIdAsync(id);
+            ValidateClassRoom(request.ClassName, request.Section);
+            ValidateAcademicYear(request.AcademicYear);
             if (classroom == null)
             {
                 throw new NotFoundException($"ClassRoom with this id {id} was not found");

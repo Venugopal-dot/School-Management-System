@@ -27,7 +27,7 @@ namespace School.Infrastructure.Repositories
 
         public async Task<ClassRoom> AddAsync(ClassRoom classRoom)
         {
-            classRoom.CreatedOn = DateTime.Now;
+            classRoom.CreatedOn = DateTime.UtcNow;
             _context.ClassRooms.Add(classRoom);
             await _context.SaveChangesAsync();
             return classRoom;
@@ -51,7 +51,7 @@ namespace School.Infrastructure.Repositories
         }
         public async Task<ClassRoom> UpdateAsync(ClassRoom classRoom)
         {
-            classRoom.UpdatedOn = DateTime.Now;
+            classRoom.UpdatedOn = DateTime.UtcNow;
             _context.ClassRooms.Update(classRoom);
             await _context.SaveChangesAsync();
             return classRoom;
