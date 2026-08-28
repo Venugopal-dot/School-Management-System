@@ -32,6 +32,8 @@ namespace School.Api.Middleware
 
                     DuplicateRecordException => StatusCodes.Status409Conflict,
 
+                    ExternalApiException => StatusCodes.Status503ServiceUnavailable,
+
                     DbUpdateException dbEx when
                         dbEx.InnerException is SqlException sqlEx &&
                         (sqlEx.Number == 2601 || sqlEx.Number == 2627)

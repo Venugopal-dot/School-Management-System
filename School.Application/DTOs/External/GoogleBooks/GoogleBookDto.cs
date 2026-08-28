@@ -1,0 +1,11 @@
+﻿namespace School.Application.DTOs.External.GoogleBooks;
+
+public class GoogleBookDto
+{
+    public string Title { get; set; } = string.Empty;
+    public string Authors { get; set; } = string.Empty;
+    public string PublishedDate { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public string Thumbnail { get; set; } = string.Empty;
+    public string PreviewLink { get; set; } = string.Empty;
+}

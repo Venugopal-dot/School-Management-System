@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using Polly;
+using School.Api.Middleware;
+using School.Application.Interfaces;
+using School.Application.Services;
 using School.Domain.Interfaces;
 using School.Infrastructure.Data;
 using School.Infrastructure.Repositories;
-using School.Api.Middleware;
-using School.Application.Services;
-using School.Application.Interfaces;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +32,22 @@ builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<IGradeRepository, GradeRepository>();
 builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
+
+var googleBooksBaseUrl =
+    builder.Configuration["ExternalApis:GoogleBooks:BaseUrl"];
+
+builder.Services.AddHttpClient<IGoogleBooksService, GoogleBooksService>(client =>
+{
+    client.BaseAddress = new Uri(googleBooksBaseUrl!);
+    client.Timeout = TimeSpan.FromSeconds(10);
+})
+.AddStandardResilienceHandler(options =>
+{
+    options.Retry.MaxRetryAttempts = 3;
+    options.Retry.Delay = TimeSpan.FromSeconds(2);
+    options.Retry.BackoffType = DelayBackoffType.Exponential;
+    options.Retry.UseJitter = true;
+});
 
 var app = builder.Build();
 
