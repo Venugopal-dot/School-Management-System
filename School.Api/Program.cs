@@ -6,7 +6,7 @@ using School.Application.Services;
 using School.Domain.Interfaces;
 using School.Infrastructure.Data;
 using School.Infrastructure.Repositories;
-
+using School.Application.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,11 +34,16 @@ builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
 
 var googleBooksBaseUrl =
-    builder.Configuration["ExternalApis:GoogleBooks:BaseUrl"];
+builder.Services.Configure<GoogleBooksOptions>(
+    builder.Configuration.GetSection(GoogleBooksOptions.SectionName));
+
+var googleBooksOptions = builder.Configuration
+    .GetSection(GoogleBooksOptions.SectionName)
+    .Get<GoogleBooksOptions>();
 
 builder.Services.AddHttpClient<IGoogleBooksService, GoogleBooksService>(client =>
 {
-    client.BaseAddress = new Uri(googleBooksBaseUrl!);
+    client.BaseAddress = new Uri(googleBooksOptions!.BaseUrl);
     client.Timeout = TimeSpan.FromSeconds(10);
 })
 .AddStandardResilienceHandler(options =>
