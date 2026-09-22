@@ -16,6 +16,7 @@ namespace School.Infrastructure.Data
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Grade> Grades { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

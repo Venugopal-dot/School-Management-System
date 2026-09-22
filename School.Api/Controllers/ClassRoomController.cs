@@ -2,6 +2,7 @@
 using School.Api.Models;
 using School.Application.DTOs.ClassRoom;
 using School.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace School.Api.Controllers
 {
@@ -17,6 +18,7 @@ namespace School.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Teacher")]
         public async Task<IActionResult> GetAllClassRooms()
         {
             var classrooms = await _service.GetAllAsync();
@@ -43,6 +45,7 @@ namespace School.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateClassRoomAsync(
             CreateClassRoomRequest room)
         {
@@ -58,6 +61,7 @@ namespace School.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateClassRoom(
             int id,
             UpdateClassRoomRequest room)
@@ -73,6 +77,7 @@ namespace School.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteClassRoom(int id)
         {
             await _service.DeleteAsync(id);

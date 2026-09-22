@@ -2,6 +2,7 @@
 using School.Api.Models;
 using School.Application.DTOs.Grade;
 using School.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace School.Api.Controllers;
 
@@ -17,6 +18,7 @@ public class GradeController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin,Teacher")]
     public async Task<IActionResult> GetAllAsync()
     {
         var grades = await _service.GetAllAsync();
@@ -43,6 +45,7 @@ public class GradeController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin,Teacher")]
     public async Task<IActionResult> Create(
         [FromBody] CreateGradeRequest request)
     {
@@ -60,6 +63,7 @@ public class GradeController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin,Teacher")]
     public async Task<IActionResult> Update(
         int id,
         [FromBody] UpdateGradeRequest request)
@@ -75,6 +79,7 @@ public class GradeController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteGrade(int id)
     {
         await _service.DeleteAsync(id);

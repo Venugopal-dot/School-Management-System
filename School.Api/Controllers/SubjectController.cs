@@ -2,6 +2,7 @@
 using School.Api.Models;
 using School.Application.DTOs.Subject;
 using School.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace School.Api.Controllers
 {
@@ -17,6 +18,7 @@ namespace School.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Teacher")]
         public async Task<IActionResult> GetAllAsync()
         {
             var subjects = await _service.GetAllAsync();
@@ -42,6 +44,7 @@ namespace School.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] CreateSubjectRequest request)
         {
             var subject = await _service.CreateAsync(request);
@@ -57,6 +60,7 @@ namespace School.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(int id, UpdateSubjectRequest request)
         {
             var subject = await _service.UpdateAsync(id, request);
@@ -70,6 +74,7 @@ namespace School.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteSubject(int id)
         {
             await _service.DeleteAsync(id);
