@@ -1,0 +1,283 @@
+<app-navbar></app-navbar>
+
+<div class="students-container">
+
+    <div class="students-card">
+
+        <!-- PAGE HEADER -->
+        <div class="page-header">
+
+            <h1>Students</h1>
+
+            <button class="add-button" (click)="openAddForm()">
+
+                + Add Student
+
+            </button>
+
+        </div>
+
+
+        <!-- SUCCESS MESSAGE -->
+        <p *ngIf="successMessage" class="success">
+
+            {{ successMessage }}
+
+        </p>
+
+
+        <!-- ADD STUDENT FORM -->
+        <div class="add-student-form" *ngIf="showAddForm">
+
+            <h2>
+                {{ isEditMode ? 'Edit Student' : 'Add Student' }}
+            </h2>
+
+
+            <!-- FIRST NAME / LAST NAME -->
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        First Name
+                    </label>
+
+                    <input type="text" [(ngModel)]="newStudent.firstName" placeholder="Enter first name">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Last Name
+                    </label>
+
+                    <input type="text" [(ngModel)]="newStudent.lastName" placeholder="Enter last name">
+
+                </div>
+
+            </div>
+
+
+            <!-- DATE OF BIRTH / GENDER -->
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        Date of Birth
+                    </label>
+
+                    <input type="date" [(ngModel)]="newStudent.dateOfBirth">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Gender
+                    </label>
+
+                    <select [(ngModel)]="newStudent.gender">
+                        <option [ngValue]="1">Male</option>
+                        <option [ngValue]="2">Female</option>
+                        <option [ngValue]="3">Other</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- EMAIL / PHONE -->
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        Email
+                    </label>
+
+                    <input type="email" [(ngModel)]="newStudent.email" placeholder="Enter email">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Phone Number
+                    </label>
+
+                    <input type="text" [(ngModel)]="newStudent.phoneNumber" maxlength="10"
+                        placeholder="10 digit phone number">
+
+                </div>
+
+            </div>
+
+
+            <!-- ADDRESS -->
+            <div class="form-group">
+
+                <label>
+                    Address
+                </label>
+
+                <textarea [(ngModel)]="newStudent.address" placeholder="Enter address">
+                </textarea>
+
+            </div>
+
+
+            <!-- CLASS ROOM -->
+            <div class="form-group">
+
+                <label>
+                    Class Room ID
+                </label>
+
+                <input type="number" [(ngModel)]="newStudent.classRoomId" min="1">
+
+            </div>
+
+
+            <!-- FORM ERROR -->
+            <p *ngIf="errorMessage" class="error">
+
+                {{ errorMessage }}
+
+            </p>
+
+
+            <!-- FORM BUTTONS -->
+            <div class="form-actions">
+
+                <button class="save-button" (click)="saveStudent()" [disabled]="isSaving">
+
+                    {{
+                    isSaving
+                    ? (isEditMode ? 'Updating...' : 'Saving...')
+                    : (isEditMode ? 'Update Student' : 'Save Student')
+                    }}
+
+                </button>
+
+
+                <button class="cancel-button" (click)="closeAddForm()" [disabled]="isSaving">
+
+                    Cancel
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- LOADING -->
+        <p *ngIf="isLoading">
+
+            Loading students...
+
+        </p>
+
+        <p style="color: red; font-size: 20px;">
+            DEBUG - Students count: {{ students.length }}
+        </p>
+        <!-- STUDENT TABLE -->
+        <table *ngIf="
+                !isLoading &&
+                !errorMessage &&
+                students.length > 0
+            ">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        ID
+                    </th>
+
+                    <th>
+                        Admission Number
+                    </th>
+
+                    <th>
+                        Name
+                    </th>
+
+                    <th>
+                        Email
+                    </th>
+
+                    <th>
+                        Actions
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr *ngFor="let student of students">
+
+                    <td>
+                        {{ student.id }}
+                    </td>
+
+                    <td>
+                        {{ student.admissionNumber }}
+                    </td>
+
+                    <td>
+                        {{ student.firstName }}
+                        {{ student.lastName }}
+                    </td>
+
+                    <td>
+                        {{ student.email }}
+                    </td>
+
+                    <td>
+
+                        <button class="edit-button" (click)="editStudent(student)">
+                            Edit
+                        </button>
+
+
+                        <button class="delete-button" (click)="deleteStudent(student)">
+
+                            Delete
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+
+        <!-- NO STUDENTS -->
+        <p *ngIf="
+                !isLoading &&
+                !errorMessage &&
+                students.length === 0
+            ">
+
+            No students found.
+
+        </p>
+
+    </div>
+
+</div>

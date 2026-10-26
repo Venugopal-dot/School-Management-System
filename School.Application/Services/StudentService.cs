@@ -50,7 +50,7 @@ public class StudentService : IStudentService
             Email = student.Email
         };
     }
-    private static StudentDto MapToDto(Student student)
+    private StudentDto MapToDto(Student student)
     {
         return new StudentDto
         {
@@ -58,7 +58,12 @@ public class StudentService : IStudentService
             AdmissionNumber = student.AdmissionNumber,
             FirstName = student.FirstName,
             LastName = student.LastName,
-            Email = student.Email
+            DateOfBirth = student.DateOfBirth,
+            Gender = student.Gender,
+            Email = student.Email,
+            PhoneNumber = student.PhoneNumber,
+            Address = student.Address,
+            ClassRoomId = student.ClassRoomId
         };
     }
     public async Task<IEnumerable<StudentDto>> GetAllAsync()

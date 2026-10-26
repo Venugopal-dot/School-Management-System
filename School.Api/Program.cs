@@ -12,13 +12,23 @@ using School.Domain.Entities;
 using School.Domain.Interfaces;
 using School.Infrastructure.Data;
 using School.Infrastructure.Repositories;
+using School.Infrastructure.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Controllers
 builder.Services.AddControllers();
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AngularPolicy", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 
@@ -75,6 +85,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
+builder.Services.AddScoped<IEmailService, DevelopmentEmailService>();
 
 // Google Books configuration
 builder.Services.Configure<GoogleBooksOptions>(
@@ -140,6 +152,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AngularPolicy");
 
 // JWT Authentication
 app.UseAuthentication();

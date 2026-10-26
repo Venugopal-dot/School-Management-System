@@ -1,0 +1,51 @@
+<nav class="navbar">
+
+    <div class="brand">
+        School Management System
+    </div>
+
+    <div class="nav-links">
+
+        <a routerLink="/dashboard">
+            Dashboard
+        </a>
+
+        <!-- Admin + Teacher -->
+        <a routerLink="/students">
+            Students
+        </a>
+
+        <a routerLink="/subjects">
+            Subjects
+        </a>
+
+        <a routerLink="/grades">
+            Grades
+        </a>
+
+        <a routerLink="/classrooms">
+            Classrooms
+        </a>
+
+        <a routerLink="/attendance">
+            Attendance
+        </a>
+
+        <!-- Admin only -->
+        <a *ngIf="isAdmin()" routerLink="/teachers">
+            Teachers
+        </a>
+
+    </div>
+
+    <div class="user-section">
+        <span>
+            {{ userName }} ({{ role }})
+        </span>
+
+        <button (click)="logout()">
+            Logout
+        </button>
+    </div>
+
+</nav>

@@ -12,7 +12,9 @@ public class User : BaseEntity
 
     public string Role { get; set; } = string.Empty;
 
-    public string? PasswordResetToken { get; set; }
+    //public string? PasswordResetToken { get; set; }
 
     public DateTime? PasswordResetTokenExpiry { get; set; }
+
+    public string? PasswordResetTokenHash { get; set; }
 }

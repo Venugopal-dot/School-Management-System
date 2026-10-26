@@ -1,0 +1,66 @@
+.students-container {
+  min-height: calc(100vh - 70px);
+  padding: 30px;
+  background: #f4f6f9;
+}
+
+.students-card {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.page-header h1 {
+  margin: 0;
+}
+
+button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-button {
+  background: #198754;
+  color: white;
+}
+
+.edit-button {
+  margin-right: 8px;
+}
+
+.delete-button {
+  background: #dc3545;
+  color: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background: #f8f9fa;
+}
+
+.error {
+  color: #dc3545;
+}

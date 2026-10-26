@@ -1,0 +1,60 @@
+<app-navbar></app-navbar>
+<div class="dashboard-container">
+
+    <div class="dashboard-card">
+
+        <h1>School Management System</h1>
+
+        <h2>Welcome, {{ userName }}</h2>
+
+        <p>
+            Role:
+            <strong>{{ role }}</strong>
+        </p>
+
+        <button (click)="logout()">Logout</button>
+
+        <hr>
+
+        <h2>Students</h2>
+
+        <p *ngIf="isLoadingStudents">
+            Loading students...
+        </p>
+
+        <p *ngIf="studentError">
+            {{ studentError }}
+        </p>
+
+        <table *ngIf="!isLoadingStudents && !studentError && students.length > 0">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Admission Number</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let student of students">
+                    <td>{{ student.id }}</td>
+                    <td>{{ student.admissionNumber }}</td>
+                    <td>
+                        {{ student.firstName }}
+                        {{ student.lastName }}
+                    </td>
+                    <td>{{ student.email }}</td>
+                </tr>
+            </tbody>
+
+        </table>
+
+        <p *ngIf="!isLoadingStudents && !studentError && students.length === 0">
+            No students found.
+        </p>
+
+    </div>
+
+</div>

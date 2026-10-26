@@ -5,6 +5,7 @@ using School.Application.Interfaces;
 using School.Domain.Entities;
 using School.Domain.Interfaces;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace School.Application.Services;
 
@@ -13,15 +14,18 @@ public class AuthService : IAuthService
     private readonly IUserRepository _userRepository;
     private readonly IPasswordHasher<User> _passwordHasher;
     private readonly IJwtTokenService _jwtTokenService;
+    private readonly IEmailService _emailService;
 
     public AuthService(
         IUserRepository userRepository,
         IPasswordHasher<User> passwordHasher,
-        IJwtTokenService jwtTokenService)
+        IJwtTokenService jwtTokenService,
+        IEmailService emailService)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
         _jwtTokenService = jwtTokenService;
+        _emailService = emailService;
     }
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
@@ -54,9 +58,7 @@ public class AuthService : IAuthService
         {
             UserName = request.UserName,
             Email = request.Email,
-            Role = string.IsNullOrWhiteSpace(request.Role)
-                ? "Student"
-                : request.Role
+            Role = "Student"
         };
 
         user.PasswordHash = _passwordHasher.HashPassword(
@@ -131,10 +133,15 @@ public class AuthService : IAuthService
         var resetToken = Convert.ToBase64String(
             RandomNumberGenerator.GetBytes(32));
 
-        user.PasswordResetToken = resetToken;
+        var resetTokenHash = Convert.ToBase64String(
+            SHA256.HashData(Encoding.UTF8.GetBytes(resetToken)));
+
+        //user.PasswordResetToken = resetToken;
+        user.PasswordResetTokenHash = resetTokenHash;
         user.PasswordResetTokenExpiry = DateTime.UtcNow.AddMinutes(15);
 
         await _userRepository.UpdateAsync(user);
+        await _emailService.SendPasswordResetEmailAsync(user.Email, resetToken);
     }
 
     public async Task ResetPasswordAsync(ResetPasswordRequest request)
@@ -157,10 +164,15 @@ public class AuthService : IAuthService
         if (user == null)
             throw new BusinessValidationException("Invalid password reset request.");
 
-        if (string.IsNullOrWhiteSpace(user.PasswordResetToken) ||
-            user.PasswordResetToken != request.ResetToken)
+        var resetTokenHash = Convert.ToBase64String(
+            SHA256.HashData(
+                Encoding.UTF8.GetBytes(request.ResetToken)));
+
+        if (string.IsNullOrWhiteSpace(user.PasswordResetTokenHash) ||
+            user.PasswordResetTokenHash != resetTokenHash)
         {
-            throw new BusinessValidationException("Invalid password reset request.");
+            throw new BusinessValidationException(
+                "Invalid password reset request.");
         }
 
         if (!user.PasswordResetTokenExpiry.HasValue ||
@@ -175,7 +187,8 @@ public class AuthService : IAuthService
             request.NewPassword);
 
         // Invalidate the token after successful reset
-        user.PasswordResetToken = null;
+        //user.PasswordResetToken = null;
+        user.PasswordResetTokenHash = null;
         user.PasswordResetTokenExpiry = null;
 
         await _userRepository.UpdateAsync(user);
